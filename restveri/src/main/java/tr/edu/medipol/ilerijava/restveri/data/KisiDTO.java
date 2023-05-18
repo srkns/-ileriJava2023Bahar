@@ -7,4 +7,5 @@ public class KisiDTO {
     private String ad;
     private String soyad;
     private int yas;
+    private String telefon;
 }

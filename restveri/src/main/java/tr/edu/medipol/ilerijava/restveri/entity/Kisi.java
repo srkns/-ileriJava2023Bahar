@@ -16,5 +16,6 @@ public class Kisi {
     private String ad;
     private String soyad;
     private int yas;
+    private String telefon;
 
 }

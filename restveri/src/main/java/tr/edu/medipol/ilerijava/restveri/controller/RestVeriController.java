@@ -25,6 +25,7 @@ public class RestVeriController {
         kisi.setAd(kisiDTO.getAd());
         kisi.setSoyad(kisiDTO.getSoyad());
         kisi.setYas(kisiDTO.getYas());
+        kisi.setTelefon(kisiDTO.getTelefon());
         kisi = kisiRepository.save(kisi);
         return kisi;
     }
@@ -51,6 +52,7 @@ public class RestVeriController {
         kisi.setAd(kisiDTO.getAd());
         kisi.setSoyad(kisiDTO.getSoyad());
         kisi.setYas(kisiDTO.getYas());
+        kisi.setTelefon(kisiDTO.getTelefon());
         kisi = kisiRepository.save(kisi);
         return kisi;
     }
