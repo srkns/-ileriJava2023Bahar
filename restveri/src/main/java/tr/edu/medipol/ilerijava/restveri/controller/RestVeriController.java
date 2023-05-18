@@ -14,11 +14,6 @@ public class RestVeriController {
     @Autowired
     KisiRepository kisiRepository;
 
-    @GetMapping("/")
-    public String selam() {
-        return "Merhaba";
-    }
-
     @PostMapping("/kisi-ekle")
     public Kisi kisiEkle(@RequestBody KisiDTO kisiDTO) {
         Kisi kisi = new Kisi();
@@ -32,6 +27,7 @@ public class RestVeriController {
 
     @GetMapping("/kisi-listele")
     public List<Kisi> kisileriListele() {
+        System.out.println("Kisi Listeleme Servisi Çağırıldı!");
         return kisiRepository.findAll();
     }
 
@@ -41,7 +37,7 @@ public class RestVeriController {
     }
 
     @DeleteMapping("/kisi/{id}")
-    public String kisiyiSil(Long id) {
+    public String kisiyiSil(@PathVariable Long id) {
         kisiRepository.deleteById(id);
         return id + " nolu kisi silindi.";
     }

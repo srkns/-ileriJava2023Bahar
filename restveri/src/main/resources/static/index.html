@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ders 10</title>
+    <style>
+        body {background-color: powderblue;}
+        h1   {color: blue;}
+        h4   {color: red;}
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    Ders 10 Web Sayfası
+    <div>
+        <h1>Kişi Listesi</h1>
+        <h4>Kişileri listelemek için aşağıdaki butona basınız!</h4>
+        <input type="button" value="Kişileri Listele" onclick="kisiListele()"/>
+        <br>
+        <br>
+        <div id="kisiListesi"></div>
+    </div>
+    <div>
+        <h1>Kişi Ekle</h1>
+        <h4>Kişiyi eklemek için bilgilerini doldurup aşağıdaki butona basınız!</h4>
+        <input type="text" id="ad" placeholder="Ad">
+        <input type="text" id="soyad" placeholder="Soyad">
+        <input type="number" id="yas" placeholder="Yaş">
+        <input type="text" id="telefon" placeholder="Telefon">
+        <input type="button" value="Kişi Ekle" onclick="kisiEkle()"/>
+        <br>
+        <br>
+    </div>
+    <div>
+        <h1>Kişi Güncelle</h1>
+        <h4>Kişiyi güncellemek için bilgilerini doldurup aşağıdaki butona basınız!</h4>
+        <input type="text" id="id_guncelleme" placeholder="ID">
+        <input type="text" id="ad_guncelleme" placeholder="Ad">
+        <input type="text" id="soyad_guncelleme" placeholder="Soyad">
+        <input type="number" id="yas_guncelleme" placeholder="Yaş">
+        <input type="text" id="telefon_guncelleme" placeholder="Telefon">
+        <input type="button" value="Kişi Güncelle" onclick="kisiGuncelle()"/>
+        <br>
+        <br>
+    </div>
+    <div>
+        <h1>Kişi Silme</h1>
+        <h4>Kişiyi silmek için id bilgisini girip aşağıdaki butona basınız!</h4>
+        <input type="text" id="id_silme" placeholder="ID">
+        <input type="button" value="Kişi Sil" onclick="kisiSil()"/>
+        <br>
+        <br>
+    </div>
+    <script type="application/javascript">
+        function kisiSil() {
+            var id = document.getElementById("id_silme").value;
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open("DELETE", "http://localhost:8080/kisi/" + id, true);
+            httpRequest.onreadystatechange = function () {
+                if(httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    kisiListele();
+                }
+            };
+            httpRequest.send();
+        }
+        function kisiGuncelle() {
+            var id = document.getElementById("id_guncelleme").value;
+            const parametreler = {
+                ad: document.getElementById("ad_guncelleme").value,
+                soyad: document.getElementById("soyad_guncelleme").value,
+                yas: document.getElementById("yas_guncelleme").value,
+                telefon: document.getElementById("telefon_guncelleme").value
+            }
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open("PUT", "http://localhost:8080/kisi/" + id, true);
+            httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            httpRequest.onreadystatechange = function () {
+                if(httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    kisiListele();
+                }
+            };
+            httpRequest.send(JSON.stringify(parametreler));
+        }
+        function kisiEkle() {
+            const parametreler = {
+                ad: document.getElementById("ad").value,
+                soyad: document.getElementById("soyad").value,
+                yas: document.getElementById("yas").value,
+                telefon: document.getElementById("telefon").value
+            }
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open("POST", "http://localhost:8080/kisi-ekle", true);
+            httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            httpRequest.onreadystatechange = function () {
+                if(httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    kisiListele();
+                }
+            };
+            httpRequest.send(JSON.stringify(parametreler));
+        }
+        function kisiListele() {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open("GET", "http://localhost:8080/kisi-listele", true);
+            httpRequest.onreadystatechange = function () {
+                if(httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    var kisiler = JSON.parse(httpRequest.response);
+                    var tabloIlkKisim = "<table><tr><th>ID</th><th>AD</th><th>SOYAD</th><th>YAŞ</th><th>TELEFON</th></tr>";
+                    var tabloVeriKismi = "";
+                    for (var i = 0; i < kisiler.length; i++) {
+                        tabloVeriKismi += "<tr><td>" + kisiler[i].id + "</td>"
+                                        + "<td>" + kisiler[i].ad + "</td>"
+                                        + "<td>" + kisiler[i].soyad + "</td>"
+                                        + "<td>" + kisiler[i].yas + "</td>"
+                                        + "<td>" + kisiler[i].telefon + "</td></tr>";
+                    }
+                    var tabloSonKisim = "</table>";
+                    var tablo = tabloIlkKisim + tabloVeriKismi + tabloSonKisim;
+                    document.getElementById("kisiListesi").innerHTML = tablo;
+                }
+            };
+            httpRequest.send();
+        }
+    </script>
+</body>
+</html>
